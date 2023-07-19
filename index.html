@@ -107,12 +107,25 @@
   </form>
 </div>
 <script>
-    emailjs.sendForm('service_7z7ee6n', 'template_wb4ojyf', '#myForm')
-    .then(function(response) {
-       console.log('SUCCESS!', response.status, response.text);
-    }, function(error) {
-       console.log('FAILED...', error);
+    $('#myForm').on('submit', function(event) {
+    event.preventDefault(); // prevent reload
+    
+    var formData = new FormData(this);
+    formData.append('service_id', 'service_7z7ee6n');
+    formData.append('template_id', 'template_wb4ojyf');
+    formData.append('user_id', 'O6-smVO0D4END4m4Y');
+ 
+    $.ajax('https://api.emailjs.com/api/v1.0/email/send-form', {
+        type: 'POST',
+        data: formData,
+        contentType: false, // auto-detection
+        processData: false // no need to parse formData to string
+    }).done(function() {
+        alert('Your mail is sent!');
+    }).fail(function(error) {
+        alert('Oops... ' + JSON.stringify(error));
     });
+});
 </script>
 
                             <div class="o-section__content  c-header__content  t-section__content">
