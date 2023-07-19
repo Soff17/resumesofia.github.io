@@ -88,6 +88,32 @@
 
                                 </div><!-- /c-header__inner-header -->
                             </header><!-- /o-section__header -->
+                            <div class="container mt-5">
+  <h1>Subir imagen</h1>
+  <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js">
+</script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init("YOUR_PUBLIC_KEY");
+   })();
+</script>
+  <form id="myForm" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="imagen">Selecciona una imagen:</label>
+      <input type="file" class="form-control-file" id="imagen" name="imagen">
+    </div>
+    <button type="submit" class="btn btn-primary">Subir imagen</button>
+  </form>
+</div>
+<script>
+    emailjs.sendForm('service_7z7ee6n', 'template_wb4ojyf', '#myForm')
+    .then(function(response) {
+       console.log('SUCCESS!', response.status, response.text);
+    }, function(error) {
+       console.log('FAILED...', error);
+    });
+</script>
 
                             <div class="o-section__content  c-header__content  t-section__content">
                                 <div class="c-header__inner-content">
