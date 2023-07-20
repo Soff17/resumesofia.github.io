@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
   // Configura los parámetros del correo
   $emailParams = (new EmailParams())
-    ->setFrom('your@domain.com')
+    ->setFrom('chofasbff@gmail.com')
     ->setFromName('Your Name')
     ->setRecipients($recipients)
     ->setSubject('Subject')
