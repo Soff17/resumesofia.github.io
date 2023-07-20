@@ -89,44 +89,154 @@
                                 </div><!-- /c-header__inner-header -->
                             </header><!-- /o-section__header -->
                             <div class="container mt-5">
-  <h1>Subir imagen</h1>
-  <script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js">
-</script>
-<script type="text/javascript">
-   (function(){
-      emailjs.init("YOUR_PUBLIC_KEY");
-   })();
-</script>
-  <form id="myForm" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-      <label for="imagen">Selecciona una imagen:</label>
-      <input type="file" class="form-control-file" id="imagen" name="imagen">
-    </div>
-    <button type="submit" class="btn btn-primary">Subir imagen</button>
-  </form>
-</div>
+                                <form id="miFormulario">
+  <!-- Campos para la información del destinatario -->
+  <input type="text" name="recipientEmail" placeholder="Correo del destinatario">
+  <input type="text" name="recipientName" placeholder="Nombre del destinatario">
+
+  <!-- Campos para la información del pedido -->
+  <input type="text" name="orderTotal" placeholder="Total del pedido">
+  <input type="text" name="orderSubtotal" placeholder="Subtotal del pedido">
+  <input type="text" name="orderNumber" placeholder="Número de pedido">
+  <input type="text" name="shippingDay" placeholder="Día de envío">
+  <input type="text" name="deliveryMethod" placeholder="Método de envío">
+  <input type="text" name="trackingNumber" placeholder="Número de seguimiento">
+  <input type="text" name="deliveryMethodFee" placeholder="Costo de envío">
+
+  <!-- Campos para la información del producto -->
+  <input type="text" name="productSize" placeholder="Tamaño del producto">
+  <input type="text" name="productColor" placeholder="Color del producto">
+  <input type="text" name="productPrice" placeholder="Precio del producto">
+  <input type="file" name="productImage">
+
+  <!-- Campos para la información del cliente -->
+  <input type="text" name="customerName" placeholder="Nombre del cliente">
+  <input type="text" name="customerPhone" placeholder="Teléfono del cliente">
+  <input type="text" name="customerAddress1" placeholder="Dirección del cliente (línea 1)">
+  <input type="text" name="customerAddress2" placeholder="Dirección del cliente (línea 2)">
+
+  <!-- Campo para el nombre de la cuenta -->
+  <input type="text" name="accountName" placeholder="Nombre de la cuenta">
+
+  <button type="submit">Enviar correo</button>
+</form>
 <script>
-    $('#myForm').on('submit', function(event) {
-    event.preventDefault(); // prevent reload
-    
-    var formData = new FormData(this);
-    formData.append('service_id', 'service_7z7ee6n');
-    formData.append('template_id', 'template_wb4ojyf');
-    formData.append('user_id', 'O6-smVO0D4END4m4Y');
- 
-    $.ajax('https://api.emailjs.com/api/v1.0/email/send-form', {
-        type: 'POST',
-        data: formData,
-        contentType: false, // auto-detection
-        processData: false // no need to parse formData to string
-    }).done(function() {
-        alert('Your mail is sent!');
-    }).fail(function(error) {
-        alert('Oops... ' + JSON.stringify(error));
+  document.getElementById("miFormulario").addEventListener("submit", function(event) {
+    event.preventDefault(); // Evita el envío del formulario por defecto
+
+    // Obtén los valores del formulario
+    const recipientEmail = document.getElementsByName("recipientEmail")[0].value;
+    // ... Obtén los otros valores del formulario ...
+
+    // Obtén el archivo seleccionado por el usuario
+    const productImage = document.querySelector('input[type="file"]').files[0];
+
+    // Crea un objeto FormData para enviar datos y el archivo al servidor
+    const formData = new FormData();
+    formData.append("recipientEmail", recipientEmail);
+    // ... Agrega los otros datos del formulario al formData ...
+    formData.append("productImage", productImage);
+
+    // Envía la solicitud al servidor para enviar el correo usando fetch API
+    fetch("/ruta_del_endpoint_del_servidor.php", {
+      method: "POST",
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data); // Datos de respuesta del servidor
+      alert("Correo enviado correctamente.");
+    })
+    .catch(error => {
+      console.error("Error al enviar el correo:", error);
+      alert("Ocurrió un error al enviar el correo.");
     });
-});
+  });
 </script>
+<?php
+require 'vendor/autoload.php'; // Asegúrate de incluir la librería MailerSend
+
+use MailerSend\MailerSend;
+use MailerSend\Helpers\Builder\Personalization;
+use MailerSend\Helpers\Builder\Recipient;
+use MailerSend\Helpers\Builder\EmailParams;
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+  $recipientEmail = $_POST["recipientEmail"];
+  $recipientName = $_POST["recipientName"];
+  $orderTotal = $_POST["orderTotal"];
+  $orderSubtotal = $_POST["orderSubtotal"];
+  $orderNumber = $_POST["orderNumber"];
+  $shippingDay = $_POST["shippingDay"];
+  $deliveryMethod = $_POST["deliveryMethod"];
+  $trackingNumber = $_POST["trackingNumber"];
+  $deliveryMethodFee = $_POST["deliveryMethodFee"];
+  $productSize = $_POST["productSize"];
+  $productColor = $_POST["productColor"];
+  $productPrice = $_POST["productPrice"];
+  $productImage = $_POST["productImage"];
+  $customerName = $_POST["customerName"];
+  $customerPhone = $_POST["customerPhone"];
+  $customerAddress1 = $_POST["customerAddress1"];
+  $customerAddress2 = $_POST["customerAddress2"];
+  $accountName = $_POST["accountName"];
+
+  // Configura MailerSend con tu clave de API
+  $mailerSend = new MailerSend(['api_key' => 'mlsn.b0eacfc1545781cabc9f2d0eb5212a4b09e059907558214aa2ddbbf2c8e83485']);
+
+  // Configura la personalización del correo
+  $personalization = [
+    new Personalization($recipientEmail, [
+      'name' => $recipientName,
+      'order' => [
+        'total' => $orderTotal,
+        'subtotal' => $orderSubtotal,
+        'order_number' => $orderNumber,
+        'shipping_day' => $shippingDay,
+        'delivery_method' => $deliveryMethod,
+        'tracking_number' => $trackingNumber,
+        'delivery_method_fee' => $deliveryMethodFee
+      ],
+      'product' => [
+        [
+          'size' => $productSize,
+          'color' => $productColor,
+          'price' => $productPrice,
+          'imagen1' => base64_encode(file_get_contents($productImage))
+        ]
+      ],
+      'customer' => [
+        'name' => $customerName,
+        'phone' => $customerPhone,
+        'address_1st_line' => $customerAddress1,
+        'address_2nd_line' => $customerAddress2
+      ],
+      'account_name' => $accountName
+    ])
+  ];
+
+  // Configura los destinatarios del correo
+  $recipients = [
+    new Recipient($recipientEmail, $recipientName)
+  ];
+
+  // Configura los parámetros del correo
+  $emailParams = (new EmailParams())
+    ->setFrom('your@domain.com')
+    ->setFromName('Your Name')
+    ->setRecipients($recipients)
+    ->setSubject('Subject')
+    ->setTemplateId('0r83ql3erp04zw1j')
+    ->setPersonalization($personalization);
+
+  // Envía el correo con MailerSend
+  $response = $mailerSend->email->send($emailParams);
+
+  // Devuelve la respuesta del servidor
+  echo json_encode($response);
+}
+?>
+
 
                             <div class="o-section__content  c-header__content  t-section__content">
                                 <div class="c-header__inner-content">
