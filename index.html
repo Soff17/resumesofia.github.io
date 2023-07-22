@@ -89,65 +89,6 @@
                                 </div><!-- /c-header__inner-header -->
                             </header><!-- /o-section__header -->
                             <div class="container mt-5">
-                                <form id="myForm">
-  <label for="name">Name:</label>
-  <input type="text" id="name" name="name" required>
-
-  <label for="email">Email:</label>
-  <input type="email" id="email" name="email" required>
-
-  <label for="message">Message:</label>
-  <textarea id="message" name="message" required></textarea>
-
-  <button type="submit">Submit</button>
-</form>
-
-<script>
-  document.getElementById("myForm").addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    const formData = new FormData(this);
-    const emailData = {
-      personalizations: [
-        {
-          to: [
-            {
-              email: "sof.db@outlook.com", // Reemplaza con el correo electrónico del destinatario
-            },
-          ],
-          dynamic_template_data: {
-            name: formData.get("name"),
-            email: formData.get("email"),
-            message: formData.get("message"),
-          },
-        },
-      ],
-      from: {
-        email: "sof.db@outlook.com", // Reemplaza con el correo electrónico del remitente
-      },
-      template_id: "d-dfe2d44f5f9a429bb1d84b25e4fc1536 ", // Reemplaza con el ID de la plantilla creada en SendGrid
-    };
-
-    // Llamada a la API de SendGrid para enviar el correo electrónico
-    fetch("https://api.sendgrid.com/v3/mail/send", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer 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", // Reemplaza con tu clave de API de SendGrid
-      },
-      body: JSON.stringify(emailData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        alert("Formulario enviado con éxito!");
-      })
-      .catch((error) => {
-        console.error(error);
-        alert("Error al enviar el formulario.");
-      });
-  });
-</script>
 
                             <div class="o-section__content  c-header__content  t-section__content">
                                 <div class="c-header__inner-content">
