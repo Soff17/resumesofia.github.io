@@ -89,68 +89,63 @@
                                 </div><!-- /c-header__inner-header -->
                             </header><!-- /o-section__header -->
                             <div class="container mt-5">
-                                <form id="miFormulario">
-  <!-- Campos para la información del destinatario -->
-  <input type="text" name="recipientEmail" placeholder="Correo del destinatario">
-  <input type="text" name="recipientName" placeholder="Nombre del destinatario">
+                                <form id="myForm">
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name" required>
 
-  <!-- Campos para la información del pedido -->
-  <input type="text" name="orderTotal" placeholder="Total del pedido">
-  <input type="text" name="orderSubtotal" placeholder="Subtotal del pedido">
-  <input type="text" name="orderNumber" placeholder="Número de pedido">
-  <input type="text" name="shippingDay" placeholder="Día de envío">
-  <input type="text" name="deliveryMethod" placeholder="Método de envío">
-  <input type="text" name="trackingNumber" placeholder="Número de seguimiento">
-  <input type="text" name="deliveryMethodFee" placeholder="Costo de envío">
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" required>
 
-  <!-- Campos para la información del producto -->
-  <input type="text" name="productSize" placeholder="Tamaño del producto">
-  <input type="text" name="productColor" placeholder="Color del producto">
-  <input type="text" name="productPrice" placeholder="Precio del producto">
-  <input type="file" name="productImage">
+  <label for="message">Message:</label>
+  <textarea id="message" name="message" required></textarea>
 
-  <!-- Campos para la información del cliente -->
-  <input type="text" name="customerName" placeholder="Nombre del cliente">
-  <input type="text" name="customerPhone" placeholder="Teléfono del cliente">
-  <input type="text" name="customerAddress1" placeholder="Dirección del cliente (línea 1)">
-  <input type="text" name="customerAddress2" placeholder="Dirección del cliente (línea 2)">
-
-  <!-- Campo para el nombre de la cuenta -->
-  <input type="text" name="accountName" placeholder="Nombre de la cuenta">
-
-  <button type="submit">Enviar correo</button>
+  <button type="submit">Submit</button>
 </form>
+
 <script>
-  document.getElementById("miFormulario").addEventListener("submit", function(event) {
-    event.preventDefault(); // Evita el envío del formulario por defecto
+  document.getElementById("myForm").addEventListener("submit", function (event) {
+    event.preventDefault();
 
-    // Obtén los valores del formulario
-    const recipientEmail = document.getElementsByName("recipientEmail")[0].value;
-    // ... Obtén los otros valores del formulario ...
+    const formData = new FormData(this);
+    const emailData = {
+      personalizations: [
+        {
+          to: [
+            {
+              email: "chofasbff@gmail.com", // Reemplaza con el correo electrónico del destinatario
+            },
+          ],
+          dynamic_template_data: {
+            name: formData.get("name"),
+            email: formData.get("email"),
+            message: formData.get("message"),
+          },
+        },
+      ],
+      from: {
+        email: "chofasbff@gmail.com", // Reemplaza con el correo electrónico del remitente
+      },
+      template_id: "d-dfe2d44f5f9a429bb1d84b25e4fc1536 ", // Reemplaza con el ID de la plantilla creada en SendGrid
+    };
 
-    // Obtén el archivo seleccionado por el usuario
-    const productImage = document.querySelector('input[type="file"]').files[0];
-
-    // Crea un objeto FormData para enviar datos y el archivo al servidor
-    const formData = new FormData();
-    formData.append("recipientEmail", recipientEmail);
-    // ... Agrega los otros datos del formulario al formData ...
-    formData.append("productImage", productImage);
-
-    // Envía la solicitud al servidor para enviar el correo usando fetch API
-    fetch("POST https://api.mailersend.com/v1/email", {
+    // Llamada a la API de SendGrid para enviar el correo electrónico
+    fetch("https://api.sendgrid.com/v3/mail/send", {
       method: "POST",
-      body: formData
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer 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", // Reemplaza con tu clave de API de SendGrid
+      },
+      body: JSON.stringify(emailData),
     })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data); // Datos de respuesta del servidor
-      alert("Correo enviado correctamente.");
-    })
-    .catch(error => {
-      console.error("Error al enviar el correo:", error);
-      alert("Ocurrió un error al enviar el correo.");
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        alert("Formulario enviado con éxito!");
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Error al enviar el formulario.");
+      });
   });
 </script>
 
