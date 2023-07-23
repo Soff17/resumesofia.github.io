@@ -99,19 +99,28 @@
 
                                             <div class="c-brand">
 
+                                                <!-- // Default Form. Here, `email` is used as `replyto` -->
+
 <form action="https://api.web3forms.com/submit" method="POST">
-
     <input type="hidden" name="access_key" value="e33b4e84-3858-409e-b9a0-679136de9150">
-
     <input type="text" name="name" required>
+    <!-- replyto set by this input. usually, it's the user who submits the form.  -->
     <input type="email" name="email" required>
-    <textarea name="message" required></textarea>
-    <div class="h-captcha" data-captcha="true"></div>
     <button type="submit">Submit Form</button>
-
 </form>
 
-<script src="https://web3forms.com/client/script.js" async defer></script>
+
+<!-- // Custom `replyto` Form -->
+
+<form action="https://api.web3forms.com/submit" method="POST">
+    <input type="hidden" name="access_key" value="e33b4e84-3858-409e-b9a0-679136de9150">
+    <!-- `replyto` email will be the given value.  -->
+    <input type="hidden" name="replyto" value="chofasbff@gmail.com" />
+    <input type="text" name="name" required>
+    <input type="email" name="email" required>
+    <button type="submit">Submit Form</button>
+</form>
+
                                                 
                                                 <h1 class="c-brand__title  t-title">
                                                     <span class="c-brand__sizer">
