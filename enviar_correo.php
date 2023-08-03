@@ -1,29 +1,35 @@
 <?php
 use MailerSend\MailerSend;
-use MailerSend\Helpers\Builder\Variable;
+use MailerSend\Helpers\Builder\Personalization;
 use MailerSend\Helpers\Builder\Recipient;
 use MailerSend\Helpers\Builder\EmailParams;
 
-$mailersend = new MailerSend(['api_key' => 'mlsn.95553431f32c9186dbf2bc383b7ed2fa84d460a5582cdaffbb8767b043877451']);
+$mailersend = new MailerSend(['api_key' => 'key']);
+
+$personalization = [
+    new Personalization('recipient@email.com', [
+            'date' => '',
+            'fees' => '',
+            'name' => '',
+            'total' => '',
+            'subtotal' => '',
+            'receipt_id' => '',
+            'account_name' => '',
+            'support_email' => ''
+    ])
+];
 
 $recipients = [
-    new Recipient('your@client.com', 'Your Client'),
+    new Recipient('recipient@email.com', 'Recipient'),
 ];
-
-$variables = [
-    new Variable('your@client.com', ['var' => 'value'])
-];
-
-$tags = ['tag'];
 
 $emailParams = (new EmailParams())
-    ->setFrom('chofasbff@gmail.com')
+    ->setFrom('your@domain.com')
     ->setFromName('Your Name')
     ->setRecipients($recipients)
     ->setSubject('Subject')
-    ->setTemplateId('0r83ql3erp04zw1j')
-    ->setVariables($variables)
-    ->setTags($tags);
+    ->setTemplateId('3zxk54v7wqq4jy6v')
+    ->setPersonalization($personalization);
 
 $mailersend->email->send($emailParams);
 ?>
