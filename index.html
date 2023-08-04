@@ -99,36 +99,21 @@
 
                                             <div class="c-brand">
 
-                                                <form id="emailForm">
+                                                <form action="/sendEmail" method="post">
                                                     <label for="recipient_name">Nombre del destinatario:</label>
-                                                    <input type="text" id="recipient_name" name="recipient_name"><br><br>
+                                                    <input type="text" id="recipient_name" name="recipient_name" required><br><br>
                                             
                                                     <label for="recipient_email">Correo del destinatario:</label>
-                                                    <input type="text" id="recipient_email" name="recipient_email"><br><br>
+                                                    <input type="email" id="recipient_email" name="recipient_email" required><br><br>
                                             
                                                     <label for="subject">Asunto:</label>
-                                                    <input type="text" id="subject" name="subject"><br><br>
+                                                    <input type="text" id="subject" name="subject" required><br><br>
                                             
                                                     <label for="email_text">Contenido del correo:</label><br>
-                                                    <textarea id="email_text" name="email_text" rows="4" cols="50"></textarea><br><br>
+                                                    <textarea id="email_text" name="email_text" rows="4" cols="50" required></textarea><br><br>
                                             
-                                                    <input type="button" value="Enviar correo" onclick="sendEmail()">
+                                                    <input type="submit" value="Enviar correo">
                                                 </form>
-                                            
-                                                <script>
-                                                    function sendEmail() {
-                                                        var formData = new FormData(document.getElementById("emailForm"));
-                                            
-                                                        fetch("/sendEmail", {
-                                                            method: "POST",
-                                                            body: formData
-                                                        })
-                                                        .then(response => response.text())
-                                                        .then(data => alert(data))
-                                                        .catch(error => console.error(error));
-                                                    }
-                                                </script>
-
                                                 
                                                 <h1 class="c-brand__title  t-title">
                                                     <span class="c-brand__sizer">
