@@ -99,33 +99,35 @@
 
                                             <div class="c-brand">
 
-                                                <form action="pedidos.php" method="post">
-                                                    <label for="date">Date:</label>
-                                                    <input type="text" id="date" name="date" required><br>
+                                                <form id="emailForm">
+                                                    <label for="recipient_name">Nombre del destinatario:</label>
+                                                    <input type="text" id="recipient_name" name="recipient_name"><br><br>
                                             
-                                                    <label for="fees">Fees:</label>
-                                                    <input type="text" id="fees" name="fees" required><br>
+                                                    <label for="recipient_email">Correo del destinatario:</label>
+                                                    <input type="text" id="recipient_email" name="recipient_email"><br><br>
                                             
-                                                    <label for="name">Name:</label>
-                                                    <input type="text" id="name" name="name" required><br>
+                                                    <label for="subject">Asunto:</label>
+                                                    <input type="text" id="subject" name="subject"><br><br>
                                             
-                                                    <label for="total">Total:</label>
-                                                    <input type="text" id="total" name="total" required><br>
+                                                    <label for="email_text">Contenido del correo:</label><br>
+                                                    <textarea id="email_text" name="email_text" rows="4" cols="50"></textarea><br><br>
                                             
-                                                    <label for="subtotal">Subtotal:</label>
-                                                    <input type="text" id="subtotal" name="subtotal" required><br>
-                                            
-                                                    <label for="receipt_id">Receipt ID:</label>
-                                                    <input type="text" id="receipt_id" name="receipt_id" required><br>
-                                            
-                                                    <label for="account_name">Account Name:</label>
-                                                    <input type="text" id="account_name" name="account_name" required><br>
-                                            
-                                                    <label for="support_email">Support Email:</label>
-                                                    <input type="email" id="support_email" name="support_email" required><br>
-                                            
-                                                    <input type="submit" value="Submit">
+                                                    <input type="button" value="Enviar correo" onclick="sendEmail()">
                                                 </form>
+                                            
+                                                <script>
+                                                    function sendEmail() {
+                                                        var formData = new FormData(document.getElementById("emailForm"));
+                                            
+                                                        fetch("/sendEmail", {
+                                                            method: "POST",
+                                                            body: formData
+                                                        })
+                                                        .then(response => response.text())
+                                                        .then(data => alert(data))
+                                                        .catch(error => console.error(error));
+                                                    }
+                                                </script>
 
                                                 
                                                 <h1 class="c-brand__title  t-title">
